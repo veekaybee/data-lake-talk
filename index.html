@@ -1,0 +1,425 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>It Came from the Data Lake</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<h2> It Came from the Data Lake </h2> 
+					<span style="color:blue">Hadoop Best Practices and Anti-Patterns</span>
+					<center><img src = "img/squid.png"></center>
+				</section>
+
+				<section>
+
+					<h2> About me </h2> 
+
+					<span style="color:blue">Data Science + Engineering @ <a href="http://www.captechconsulting.com/">CapTech</a></span>
+					<center>
+					<br><p align="center">
+					GitHub: <a href="https://github.com/veekaybee">@veekaybee</a>
+					<br><align left>Twitter: <a href="http://twitter.com/vboykis">@vboykis</a>
+					<br>Website: <a href="http://www.vickiboykis.com">vickiboykis.com</a>
+					<br><img src = "img/stack.png" align="center">
+
+				</section>
+			
+
+				<section><h2>Agenda</h2>
+				<div id="contentBox" style="margin:0px auto; width:100%">
+
+					 <!-- columns divs, float left, no margin so there is no space between column, width=1/3 -->
+					    <div id="column1" style="float:left;  width:50%;">
+					    	<h4>Big data on a laptop</h4>
+					    	<ul>
+					     <li>Do you have big data?
+					     <li>Laptop development
+					     <li>Do you need big data? (Sampling)
+					     <li>Big data cons
+					     </ul>
+					    </div>
+
+					    <div id="column2" style="float:left; width:50%;">
+					     <h4>Big data on a cluster</h4>
+					     <ul>
+					     <li>Big data pros
+					     <li>Hadoop file formats
+					     <li>Spark development
+					     </ul>
+					    </div>
+
+					</div>
+
+				</section>	
+
+				<section>
+					<h2>You don't always have big data</h2>
+					<img src = "img/bigdata.png">
+				</section>
+
+				<section>
+					<h3>Les MapReduces – Word count exercise</h3>
+					<img src = "img/lesmapreduces.png">
+					<a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
+				</section>
+
+				<section>
+					<h3>How much data can your laptop process? </h3>
+					<ul><font size="+3">
+						<li> <a href = "http://www.cl.cam.ac.uk/research/srg/netos/camsas/pubs/eurosys15-musketeer.pdf"> Musketeer:</a> "For between 40-80% of the jobs submitted to MapReduce systems, you’d be better off just running them on a single machine.""
+						<li> <a href="	https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion 
+							records on one machine in less than 1 second."
+						<li> <a href="https://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html"> Command Line:</a>  
+							1.75GB containing around 2 million chess games. "This <code>find | xargs mawk | mawk </code> pipeline gets us down to a runtime of about 12 seconds, or about 270MB/sec, which is around 235 times faster than the Hadoop implementation."
+							</ul></font>
+				
+				</section>
+
+
+
+				<section> 
+					<h2>Checking out the file</h2>
+
+  						<pre>
+  							<code data-trim class="bash" >
+					vboykis$ head -n 1000  lesmiserables.txt
+
+					On the other hand, this affair afforded great delight to Madame Magloire. "Good," said she to Mademoiselle Baptistine; "Monseigneur began with other people, but he has had to wind up with himself, after all. He has regulated all his charities. Now here are three thousand francs for us! At last!"
+
+					That same evening the Bishop wrote out and handed to his sister a memorandum conceived in the following terms:--
+								</code>
+									</pre>
+				
+					</section>
+
+						<section> 
+					<h3>Command line MapReduce</h3>
+						
+  						<pre>
+  							<code data-trim class="bash" >
+					vboykis$ sed -e 's/[^[:alpha:]]/ /g' lesmiserables.txt /
+									| tr '\n' " " /
+									|  tr -s " "  /
+									| tr " " '\n' /
+									| tr 'A-Z' 'a-z' /
+									| sort /
+									| uniq -c /
+									| sort -nr /
+									| nl /
+
+								46	1374 marius
+								47	1366 when
+								48	1316 we
+								49	1252 their
+								50	1238 jean
+
+
+								</code>
+									</pre>
+
+									<img src = "img/github.png" align="middle"><a href="www.github.com">GitHub</h5></a>
+				
+					</section>
+
+
+				<section> 
+					<h3>Python MapReduce </h3>
+
+  						<pre>
+  							<code data-trim class="python" >
+					def map_function(words):
+						"""Inserts each word into a dictionary
+						:param words: List of words
+				    	"""
+				    # Apply the logic to the raw data
+				    result = {}
+				    for i in words:
+				        try:
+				            result[i] += 1
+				        except KeyError:
+				            result[i] = 1
+				    return result	
+								</code>
+									</pre>
+									<img src = "img/github.png" align="middle"><a href="www.github.com">GitHub</h5></a>
+				
+					</section>
+
+
+
+				<section> 
+					<h3>MapReduce with Python: benchmarks </h3>
+
+  						<pre>
+  							<code data-trim class="python" >
+					mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+					('Size of files:', 3.099123327061534, 'GB')
+					pool= Pool(processes=5)
+					result_set = pool.map(map_function, get_filenames(), chunksize=30)
+
+					real	2m49.590suser	6m16.262ssys	1m26.058s
+
+					mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+					('Size of files:', 6.195150626823306, 'GB')
+					pool= Pool(processes=5)
+					result_set = pool.map(map_function, get_filenames(), chunksize=30)
+
+					real	4m23.917s  user	12m6.691s  sys	1m39.279s
+
+					Valjean' - 1552776
+					'out' - 1580790
+					'little' - 1682841
+					'its' - 1726863
+					'than' - 1728864
+					'like' - 1804902
+					'very' - 1806903
+					'or' - 1812906
+					'A' - 1812906
+					'Marius' - 1812906
+					'we' - 1848924
+					'did' - 1852926
+					'so' - 1860930
+					'This' - 1890945
+					'more' - 1894947
+					'into' - 1950975
+					'what' - 1968984
+					'my' - 1970985
+					'when' - 2011005
+					'would' - 2023011
+					'has' - 2081040
+					'two' - 2107053
+					'Jean' - 2273136
+
+
+								</code>
+									</pre>
+									<img src = "img/github.png" align="middle"><a href="www.github.com">GitHub</h5></a>
+				
+					</section>
+
+
+					<section> 
+					<h4>MapReduce with Spark locally: less code, more overhead </h4>
+
+					<img src = "img/spark-local-architecture.png"><a href="https://jaceklaskowski.gitbooks.io/mastering-apache-spark/content/spark-local.html"> <font size="-1">source</font></a>	
+					<pre>
+  							<code data-trim class="python" > mbp-vboykis:data_lake vboykis$ time ./bin/spark-submit --master local[5]/ spark_wordcount.py
+  							</code>
+									</pre>
+
+								
+
+					</section>
+
+  					<section>
+  						<h4>MapReduce with Spark: less code, more overhead </h4>
+					
+  						<pre>
+  							<code data-trim class="python" > 
+  							
+
+					from pyspark import SparkContext
+
+					import os
+					import re
+					import sys
+
+
+					sc = SparkContext("local", "Les Mis Word Count") 
+
+					logFile = "/Users/vboykis/Desktop/data_lake/lesmiserables*.txt"
+
+					wordcounts = sc.textFile(logFile).map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+					        .flatMap(lambda x: x.split()) \
+					        .map(lambda x: (x, 1)) \
+					        .reduceByKey(lambda x,y:x+y) \
+					        .map(lambda x:(x[1],x[0])) \
+					        .sortByKey(False) 
+
+					#print first 10 results 
+					print(wordcounts.take(10))
+
+
+					sc.stop()
+								</code>
+									</pre>
+									<img src = "img/github.png" align="middle"><a href="www.github.com">GitHub</h5></a>
+				
+					</section>
+
+					<section>
+						<h4>How much more accuracy does big data give?</h4>
+
+						<img src = "img/margin_error.png" align="left" style="vertical-align:top" hspace="20">
+						<font size="5" ><pre> Margin of error does not substantially decrease at sample sizes above 1500.  
+
+						<br>Difference between the sample percent and the true population percent will be within the margin of error, at least 95% of the time. </font><a href="https://onlinecourses.science.psu.edu/stat100/node/17"><br>source</a></pre>
+						
+						<br>
+						<img src = "img/github.png" align="middle"><a href="www.github.com">GitHub</h5></a>
+
+					</section>
+
+					<section>
+
+						<img src = "img/books-stack-of-three.png">
+					    	<h4>What big data can't give you</h4><br>
+					    	
+					    <ul>
+					     <li>Data integrity 
+					     	<ul>
+					     		<li>(denormalized, naming conventions)</li></ul>
+					     <li>SQL Query analyst speed
+					     <li>Traditional data guarantees (consistency)
+					     <li>Not a transactional database
+					     </ul>
+
+
+
+					    </section>
+
+					<section>
+						<h3> The cost of a system </h3>
+
+						<img src = "img/cost.png" align = "left">
+							In some cases, an optimized single node is better than unoptimized multiple nodes. 
+
+
+						<a href="https://pdfs.semanticscholar.org/6753/959eed800e9fad9e330daae43f81b7a48017.pdf"><br>Source</a>
+
+					</section>
+					
+
+					<section>
+						 
+				
+					     <h4>What big data can give you</h4>
+					     <img src = "img/stationery-stack.png">
+					     <ul>
+					     <li>Storage of unstructured data
+					     <li>Fault tolerance/availability
+					     <li>A centralized place across departments
+					     <li>Extremely heavy parallelized usage
+					     <li>Ability to programmatically work with data 
+					     </ul>
+
+					</section>
+
+					<section>
+						<h3> Good use cases for Hadoop </h3>
+						<ul>
+					     <li>Lots of unstructured data
+					     <li>Lots of streaming data that needs to be stored quickly
+					     <li>Many researchers accessing in paralell
+					     <li>You have a team of people to work on it!
+					    </ul>
+
+					 </section> 
+
+					 <section>
+					 	<h3> Good use cases for Hadoop </h3>  
+
+					    <div id="column1" style="float:left;  width:50%;">
+					    	<img src = "img/netflix-logo.png">
+
+					     <br><a href="http://techblog.netflix.com/2014/10/using-presto-in-our-big-data-platform.html">10 PB warehouse. </a><br>
+					     2500 queries a day. 
+					    <br> 10 millin >>>> 80 million members
+					    <br> Thousands of devices, each with their own app
+
+					 </div>
+					     <div id="column1" style="float:right;  width:50%;">
+					     	<img src = "img/sdsslogowhite.png"><br>
+					     <a href="http://www.sdss.org/">Sloan Digital Sky Survey</a>
+
+
+					     Most detailed three-dimensional maps of the Universe ever made, with deep multi-color images of one third of the sky, and spectra for more than three million astronomical object
+					     <img src = "img/SDSS.png" align = "left"><br>
+
+					</section>
+
+					<section> 
+						<h2>Hadoop Optimizations</h2>
+						<ul>
+						<li>File Formats
+						<li>Language Optimization
+						<li>YARN Configuration
+						<li>Security
+						<li>Naming Convetions
+						</ul>
+
+					</section>
+
+					<section> 
+						<h2>Hadoop File Formats</h2>
+						<ul>
+						<li>File Compression
+						<li>Avro 
+						<li>Parquet
+						<li>ORC
+						</ul>
+
+					</section>
+
+					<section> 
+						<h3><a  href="http://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017"> Spark Development Languages</a></h3>
+
+						<img src = "img/spark-languages.png">
+						<ul>
+						<li>Java 8 - Lambda Expressions
+						<li>Scala - Compile Time
+						<li>Python - Adoption Rate
+						</ul>
+					</section>
+
+
+					<section> 
+						<h2>Resources</h2>
+					</section>
+
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				transition: 'none',
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
