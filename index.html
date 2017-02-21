@@ -256,51 +256,125 @@
 				</ul>
 			</section>
 			<section>
-				<h3>Good use cases for Hadoop</h3>
+				<h3>Good use cases for Hadoop</h3><img src="img/elephant.png">
 				<ul>
-					<li>Lots of unstructured data</li>
-					<li>Lots of streaming data that needs to be stored quickly</li>
-					<li>Many researchers accessing in paralell</li>
-					<li>You have a team of people to work on it!</li>
+					<li> A lot of data (more than 1 TB and growing)
+					<li>Unstructured data (images, video, <a href="https://twitter.com/denormalize/status/832442855683616768">metadata</a>) </li>
+					<li>Streaming data that needs to be stored quickly (logs) </li>
+					<li>Many researchers need access in paralell</li>
+					<li>You need to access and analyze ALL THE DATA </li>
+					<li>You have a dedicated team of people to work on it 
+						(@ least 1-2 dev, 1 admin, 1 analyst)</li><br>
+
 				</ul>
 			</section>
 			<section>
 				<h3>Good use cases for Hadoop</h3>
 				<div id="column1" style="float:left; width:50%;">
-					<img src="img/netflix-logo.png"> <font size="6"><br>
-					<a href="http://techblog.netflix.com/2014/10/using-presto-in-our-big-data-platform.html">
+					<a href="http://techblog.netflix.com/2014/10/using-presto-in-our-big-data-platform.html">Netflix</a><br>
+
+
+					
 					<ul>
-						<li><font size="6">10 PB warehouse.</font></li>
-						<li style="list-style: none"><br></li>
+						<li>10 PB warehouse.
 						<li>2500 queries a day.<br></li>
 						<li>10 million -&gt; 80 million members<br></li>
 						<li>Thousands of devices, each with their own app</li>
+						<li>Need to analyze user intent, uptime</li>
 					</ul></a></font>
 				</div>
-				<div id="column1" style="float:right; width:50%;">
-					<img src="img/sdsslogowhite.png"><br>
-					<a href="http://www.sdss.org/">Sloan Digital Sky Survey</a> <font size="4">Most detailed three-dimensional maps of the Universe ever made, with deep multi-color images of one third of the sky <img align="left" src="img/SDSS.png"></font><br>
+				<div id="column2" style="float:right; width:50%;">
+					<a href="http://www.sdss.org/">Sloan Digital Sky Survey</a> 
+
+					    
+					    <ul><li>Most detailed three-dimensional maps of the universe
+						<li>250 mil stars, 208 mil galaxies<br></li>
+						<li>Conduct sky measurement, stitch together sky maps</li></ul>
+						</font><br>
 				</div>
 			</section>
 			<section>
 				<h2>Hadoop Optimizations</h2>
 				<ul>
+					<li>Admin Optimization</li>
+						<ul>
+						<li>Naming Convetions</li>
+						<li>Security</li>
+						<li>YARN Configuration</li>
+					</ul>	
+				  <li>Hadoop Internals</li>
+				  <ul>
 					<li>File Formats</li>
-					<li>Language Optimization</li>
-					<li>YARN Configuration</li>
-					<li>Security</li>
-					<li>Naming Convetions</li>
+					<li>Language Optimization</li></ul>
+				</ul>
+					
 				</ul>
 			</section>
 			<section>
 				<h2>Hadoop File Formats</h2>
 				<ul>
 					<li>File Compression</li>
+					<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-yw4l{vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-yw4l">Compression format</th>
+    <th class="tg-yw4l">Tool</th>
+    <th class="tg-yw4l">Algorithm</th>
+    <th class="tg-yw4l">File extention</th>
+    <th class="tg-yw4l">Splittable</th>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">gzip</td>
+    <td class="tg-yw4l">gzip</td>
+    <td class="tg-yw4l">DEFLATE</td>
+    <td class="tg-yw4l">.gz</td>
+    <td class="tg-yw4l">No</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">bzip2</td>
+    <td class="tg-yw4l">bizp2</td>
+    <td class="tg-yw4l">bzip2</td>
+    <td class="tg-yw4l">.bz2</td>
+    <td class="tg-yw4l">Yes</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">LZO</td>
+    <td class="tg-yw4l">lzop</td>
+    <td class="tg-yw4l">LZO</td>
+    <td class="tg-yw4l">.lzo</td>
+    <td class="tg-yw4l">Yes if indexed</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Snappy</td>
+    <td class="tg-yw4l">N/A</td>
+    <td class="tg-yw4l">Snappy</td>
+    <td class="tg-yw4l">.snappy</td>
+    <td class="tg-yw4l">No</td>
+  </tr>
+</table>
 					<li>Avro</li>
+					<ul>
+						<li> Row-based storage format
+						<li> Contains its own schema
+						<li> Amenable to "full-table scans"
+						</ul>
 					<li>Parquet</li>
+					<ul>
+						<li> Columnar storage formats, sometimes used for final storage
+						<li> Great for feature selection </ul>
 					<li>ORC</li>
+						<ul>
+							<li> x
+								<li> y
+						</ul>
 				</ul>
 			</section>
+			
 			<section>
 				<h3><a href="http://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Spark Development Languages</a></h3><img src="img/spark-languages.png">
 				<ul>
