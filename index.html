@@ -249,7 +249,7 @@
 				<h4>What big data can give you</h4><img src="img/whale-breathing.png">
 				<ul>
 					<li>Storage of unstructured data</li>
-					<li>Fault tolerance/availability</li>
+					<li>Fault tolerance and availability</li>
 					<li>A centralized place across departments</li>
 					<li>Extremely heavy parallelized usage</li>
 					<li>Ability to programmatically work with data</li>
@@ -298,8 +298,8 @@
 				<ul>
 					<li>Admin Optimization</li>
 						<ul>
-						<li>Naming Convetions</li>
-						<li>Security</li>
+						<li>Naming Convetions (HDFS - filesystem)</li>
+						<li>Security (Authentication, Authorization, OS)</li>
 						<li>YARN Configuration</li>
 					</ul>	
 				  <li>Hadoop Internals</li>
@@ -312,14 +312,9 @@
 			</section>
 			<section>
 				<h2>Hadoop File Formats</h2>
-				<ul>
+				<ul><font size="3">
 					<li>File Compression</li>
-					<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style>
+<table>
 <table class="tg">
   <tr>
     <th class="tg-yw4l">Compression format</th>
@@ -357,24 +352,27 @@
     <td class="tg-yw4l">No</td>
   </tr>
 </table>
-					<li>Avro</li>
+					
+					<li>Avro - write-heavy</li>
 					<ul>
 						<li> Row-based storage format
-						<li> Contains its own schema
+						<li> Contains its own schema and schema evolution
 						<li> Amenable to "full-table scans"
 						</ul>
-					<li>Parquet</li>
+					<li>Parquet - read-heavy</li>
 					<ul>
 						<li> Columnar storage formats, sometimes used for final storage
+							<li> Smaller disk-reads
 						<li> Great for feature selection </ul>
-					<li>ORC</li>
+					<li>ORC - read-heavy</li>
 						<ul>
-							<li> x
-								<li> y
+							<li> Defaults to Zlib compression
+								<li> Mixed row-column, splittable
 						</ul>
 				</ul>
+			</font>
 			</section>
-			
+
 			<section>
 				<h3><a href="http://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Spark Development Languages</a></h3><img src="img/spark-languages.png">
 				<ul>
