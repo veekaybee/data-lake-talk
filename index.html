@@ -144,7 +144,7 @@
 
 						<code class="bash" data-trim="">
 						#Before
-				 mbp-vboykis:data-lake-code vboykis$ du -sh 
+						mbp-vboykis:data-lake-code vboykis$ du -sh 
 						3.3M
 						#After
 						mbp-vboykis:data-lake-code vboykis$ du -sh 
@@ -156,9 +156,9 @@
 				</section>
 
 			<section>
-				<h3>It's now easier to write Python</h3>
-				This is the heart of the "algorithm"
-				<div id="column1" style="float:left; width:50%;">
+				<h3>At this file size, it's now easier to write Python</h3>
+				This is the heart of the algorithm
+
 				<pre>
 					
                             <code class="python" data-trim="">
@@ -173,26 +173,22 @@
 						        result[i] += 1
 						    except KeyError:
 						        result[i] = 1
-						return result   
-                                </code></div> </pre>
+						return(result)   
 
-						<div id="column2" style="float:left; width:50%;">
-							<pre>
-						<code class="python" data-trim="">
-						def reduce(dict_list):
-							"""Reduces a dictionary with mapped keys/values by summing values
-						    	:param words: List of words
-						    	"""
-							d = {}
-							for entry in dict_list:
-								print("merging dictionary...")
-								for k, v in entry.items():
-									try:
-										d[k] += v
-									except KeyError:
-										d[k] = v
-							return d 
-						</code></div></pre><br>
+					def reduce(dict_list):
+						"""Reduces a complete dictionary by summing values
+					    	:param words: List of words
+					    	"""
+						d = {}
+						for entry in dict_list:
+							print("merging dictionary...")
+							for k, v in entry.items():
+								try:
+									d[k] += v
+								except KeyError:
+									d[k] = v
+						return(d) 
+						</code></pre><br>
 
 				<img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
 			</section>
@@ -206,8 +202,8 @@
 mbp-vboykis:data-lake-code vboykis$ time python mapreduce.py 
 Size of files: 6.195150626823306 GB
 Processing textfiles...
-[1]+  Stopped                 python3 mapreduce.py
-				real	13m17.698s
+[1]+  Stopped  python3 mapreduce.py
+real	13m17.698s
 				</code></pre>
 
 				</section>
@@ -220,9 +216,10 @@ Processing textfiles...
 					</section>
 
 					<section> <h3>What are threads and processes? </h3> 
+						(And what's a GIL?)<br>
 
 						<img src="img/gil.png">
-						<br>And what's a GIL? 
+						
 
 				</section>
 
@@ -233,7 +230,7 @@ Processing textfiles...
 <code class="python" data-trim="">
 vboykis$ python mapreduce.py
 vboykis$ top
-PID    COMMAND      %CPU  TIME     #TH      STATE
+PID    COMMAND      %CPU  TIME            STATE
 32057  Python       99.0  00:04.16 1/1    running
 </code></pre>
 
@@ -331,10 +328,8 @@ PID    COMMAND      %CPU  TIME     #TH      STATE
 					</ul> 
 
 			</section>
-
-
                                
-			</section>
+
 
 			<section>
 				<h3>The cost of a system</h3>
@@ -468,77 +463,9 @@ PID    COMMAND      %CPU  TIME     #TH      STATE
 					
 				</ul>
 			</section>
-			<section>
-				<h2>Hadoop File Formats</h2>
-				<ul><font size="5">
-					<li>File Compression</li>
-<table>
-<table class="tg">
-  <tr>
-    <th class="tg-yw4l">Compression format</th>
-    <th class="tg-yw4l">Tool</th>
-    <th class="tg-yw4l">Algorithm</th>
-    <th class="tg-yw4l">File extention</th>
-    <th class="tg-yw4l">Splittable</th>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">gzip</td>
-    <td class="tg-yw4l">gzip</td>
-    <td class="tg-yw4l">DEFLATE</td>
-    <td class="tg-yw4l">.gz</td>
-    <td class="tg-yw4l">No</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">bzip2</td>
-    <td class="tg-yw4l">bizp2</td>
-    <td class="tg-yw4l">bzip2</td>
-    <td class="tg-yw4l">.bz2</td>
-    <td class="tg-yw4l">Yes</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">LZO</td>
-    <td class="tg-yw4l">lzop</td>
-    <td class="tg-yw4l">LZO</td>
-    <td class="tg-yw4l">.lzo</td>
-    <td class="tg-yw4l">Yes if indexed</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">Snappy</td>
-    <td class="tg-yw4l">N/A</td>
-    <td class="tg-yw4l">Snappy</td>
-    <td class="tg-yw4l">.snappy</td>
-    <td class="tg-yw4l">No</td>
-  </tr>
-</table>
-					
-					<li>Avro - write-heavy</li>
-					<ul>
-						<li> Row-based storage format
-						<li> Contains its own schema and schema evolution
-						<li> Amenable to "full-table scans"
-						</ul>
-					<li>Parquet - read-heavy</li>
-					<ul>
-						<li> Columnar storage formats, sometimes used for final storage
-							<li> Smaller disk-reads
-						<li> Great for feature selection </ul>
-					<li>ORC - read-heavy</li>
-						<ul>
-							<li> Defaults to Zlib compression
-								<li> Mixed row-column, splittable
-						</ul>
-				</ul>
-			</font>
-			</section>
 
-			<section>
-				<h3><a href="http://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Spark Development Languages</a></h3><img src="img/spark-languages.png">
-				<ul>
-					<li><a href= "https://databricks.com/blog/2014/04/14/spark-with-java-8.html">Java 8</a> - Lambda Expressions</li>
-					<li><a href="https://www.quora.com/Why-is-the-Scala-compiler-so-slow">Scala</a> - Compile Time</li>
-					<li>Python - Adoption Rate</li>
-				</ul>
-			</section>
+
+
 			<section>
 				<h2>Resources</h2>
 
