@@ -20,9 +20,10 @@
 	<div class="reveal">
 		<div class="slides">
 			<section>
-				<h2>It Came from the Data Lake</h2><span style="color:blue">Hadoop Best Practices and Anti-Patterns</span>
+				<h3>Replace Hadoop with Your Laptop</h2><span style="color:blue">The Case for Multiprocessing </span>
+				<br>Vicki Boykis @vboykis
 				<center>
-					<img src="img/squid.png">
+					<img src="img/snakelephant.png">
 				</center>
 			</section>
 			<section>
@@ -38,43 +39,56 @@
 				</center>
 			</section>
 			<section>
-				<h2>Agenda</h2><img src="img/octopus.png">
-				<div id="contentBox" style="margin:0px auto; width:100%">
-					<!-- columns divs, float left, no margin so there is no space between column, width=1/3 -->
-					<div id="column1" style="float:left; width:50%;">
-						<h4>Big data on a laptop</h4>
+				<h2>Agenda<br><img src="img/snake.png"><br></h2>
 						<ul>
-							<li>Do you have big data?</li>
-							<li>Laptop development</li>
-							<li>Do you need big data? (Sampling)</li>
-							<li>Big data cons</li>
+							<li>Your computer is good enough</li>
+							<li>You don't always have big data</li>
+							<li>Multiprocessing</li>
+							<li>Distributed system overhead</li>
 						</ul>
-					</div>
-					<div id="column2" style="float:left; width:50%;">
-						<h4>Big data on a cluster</h4>
-						<ul>
-							<li>Big data pros</li>
-							<li>Hadoop file formats</li>
-							<li>Spark development</li>
-						</ul>
-					</div>
-				</div>
+
+			</section>
+
+			<section>
+				<h4>"There is a time for every data environment"</h4>
+				<h4>-The Byrds, Probably</h4>
+				<img src="img/byrds.png" align="right">
+						<blockquote>
+							To everything (turn turn)<br>
+							There is a season (turn turn)<br>
+							And a time to every purpose<br>
+							A time to laugh<br>
+							A time to cry<br>
+							A time for distributed systems<br>
+							A time for local processing<br>
+							A time for healing<br>
+						</blockquote>
+						
+
+			</section>
+				<section>
+				<h2>My computing environment<br><img src="img/environment.png"><br></h2>
+
 			</section>
 			<section>
 				<h3>You don't always have big data</h3><img src="img/bigdata.png">
+				<br>And, how frequently are you processing these sizes of data? 
 			</section>
-			<section>
-				<h3>Les MapReduces – Word count exercise</h3><img src="img/lesmapreduces.png"> <a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
-			</section>
+
 			<section>
 				<h3>How much data can your laptop process?</h3>
 				<ul>
 					<li style="list-style: none"><font size="+3"></font></li>
-					<li><font size="+3"><a href="http://www.cl.cam.ac.uk/research/srg/netos/camsas/pubs/eurosys15-musketeer.pdf">Musketeer:</a> "For between 40-80% of the jobs submitted to MapReduce systems, you’d be better off just running them on a single machine.""</font></li>
+					
 					<li><font size="+3"><a href="https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion records on one machine in less than 1 second."</font></li>
 					<li><font size="+3"><a href="https://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html">Command Line:</a> 1.75GB containing around 2 million chess games. "This <code>find | xargs mawk | mawk</code> pipeline gets us down to a runtime of about 12 seconds, or about 270MB/sec, which is around 235 times faster than the Hadoop implementation."</font></li>
 				</ul><font size="+3"></font>
 			</section>
+			<section>
+				<h3>Les MapReduces – Word count exercise</h3><img src="img/lesmapreduces.png"> <a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
+			</section>
+
+			
 			<section>
 				<h2>Checking out the file</h2>
 				<pre>
@@ -108,17 +122,51 @@
 
 
                                 </code>
+                            </pre>
                                    
 			</section>
+
+			<section> <h3>Let's say we have lots of files</h3>
+
+
+					<pre>
+				        <code class="bash" data-trim="">
+
+						# Makes n number of copies of Les Miserables
+
+						INPUT=lesmiserables.txt
+						for num in $(seq 1 1000)
+						do
+						    bn=$(basename $INPUT .txt)
+						    cp $INPUT $bn$num.txt
+						done
+				        </code> 
+
+						<code class="bash" data-trim="">
+						#Before
+				 mbp-vboykis:data-lake-code vboykis$ du -sh 
+						3.3M
+						#After
+						mbp-vboykis:data-lake-code vboykis$ du -sh 
+						3.2G
+						</code> 
+
+						<h3>Let's say we have a large file.</h3>
+
+				</section>
+
 			<section>
-				<h3>Python MapReduce</h3>
+				<h3>It's now easier to write Python</h3>
+				This is the heart of the "algorithm"
+				<div id="column1" style="float:left; width:50%;">
 				<pre>
+					
                             <code class="python" data-trim="">
-					def map_function(words):
+					def map(words):
 					    """Inserts each word into a dictionary
+					    and counts them. 
 					    :param words: List of words
 					    """
-						# Apply the logic to the raw data
 						result = {}
 						for i in words:
 						    try:
@@ -126,21 +174,126 @@
 						    except KeyError:
 						        result[i] = 1
 						return result   
+                                </code></div> </pre>
+
+						<div id="column2" style="float:left; width:50%;">
+							<pre>
+						<code class="python" data-trim="">
+						def reduce(dict_list):
+							"""Reduces a dictionary with mapped keys/values by summing values
+						    	:param words: List of words
+						    	"""
+							d = {}
+							for entry in dict_list:
+								print("merging dictionary...")
+								for k, v in entry.items():
+									try:
+										d[k] += v
+									except KeyError:
+										d[k] = v
+							return d 
+						</code></div></pre><br>
+
+				<img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
+			</section>
+
+			<section> 
+				<h2>How long does it take? 
+					<br>Killed after 13 minutes</h2>
+						<pre>
+						<code class="python" data-trim="">
+
+mbp-vboykis:data-lake-code vboykis$ time python mapreduce.py 
+Size of files: 6.195150626823306 GB
+Processing textfiles...
+[1]+  Stopped                 python3 mapreduce.py
+				real	13m17.698s
+				</code></pre>
+
+				</section>
+
+				<section> <h2>How do we speed it up?<h2> 
+
+					🎉 Multiprocessing!🎉 
+					<br>(and 🐍PyPy🐍)
+
+					</section>
+
+					<section> <h3>What are threads and processes? </h3> 
+
+						<img src="img/gil.png">
+						<br>And what's a GIL? 
+
+				</section>
+
+
+					<section> <h3>How Python Utilizes Hardware</h3> 
+
+						<pre>
+<code class="python" data-trim="">
+vboykis$ python mapreduce.py
+vboykis$ top
+PID    COMMAND      %CPU  TIME     #TH      STATE
+32057  Python       99.0  00:04.16 1/1    running
+</code></pre>
+
+
+				<img src="img/threadscores.png">
+			</section>
+
+			<section> <h2>Multiprocessing API</h2> 
+				
+				<div align="left">
+				<p>
+				<font size="6" align="left"><b>Process:</b> Each function call is a separate process (good for small programs)<br>
+				<br><b>Pool:</b> Allows you to control number of processes, maintains order of returned results</font></p></div>
+				<img src="img/processpool.png">
+
+				</section>
+
+			<section>
+
+				
+				<h3>Our Multiprocessing Code</h3>
+				<pre>
+                            <code class="python" data-trim="">
+
+	files = get_filenames()
+	pool= Pool(processes=5) 
+	result_set = pool.map(map_function, files, chunksize=30) 
+	show_items(reduce_function(result_set))
+
+	PID    COMMAND      %CPU TIME     #TH    
+	32984  Python       94.4 01:16.48 1/1    
+	32983  Python       94.8 01:14.76 1/1   
+	32982  Python       77.4 01:17.70 1/1   
+	32981  Python       95.2 01:15.60 1/1   
+	32980  Python       96.9 01:14.00 1/1    
+
                                 </code>
                                     </pre><img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
 			</section>
-			<section>
-				<h3>Python MapReduce: benchmarks</h3>
+
+	<section>
+				<h3>Our Multiprocessing Code</h3>
 				<pre>
-                            <code class="python" data-trim="">
+
+					 <code class="python" data-trim="">
 
                     pool= Pool(processes=5)
                     result_set = pool.map(map_function, get_filenames(), chunksize=30)
 
-                    mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+                    mbp-vboykis:data_lake vboykis$ time mapreduce.py
                     ('Size of files:', 3.099123327061534, 'GB')
                     
-                    real    2m49.590suser   6m16.262ssys    1m26.058s
+                    real	2m13.120s  user	8m47.443ssys	0m24.635s
+
+                    mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+
+                    "“If you want your code to run faster, you should probably just use PyPy.” — Guido"
+
+                    real	2m10.799s  user	6m28.577s  sys	0m42.156s
+                    ('Size of files:', 3.099123327061534, 'GB')
 
                     mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
                     ('Size of files:', 6.195150626823306, 'GB')
@@ -157,25 +310,43 @@
                     'or' - 1812906
                     'A' - 1812906
                     'Marius' - 1812906
-                    'we' - 1848924
-                    'did' - 1852926
-                    'so' - 1860930
-                    'This' - 1890945
-                    'more' - 1894947
-                    'into' - 1950975
-                    'what' - 1968984
-                    'my' - 1970985
-                    'when' - 2011005
-                    'would' - 2023011
-                    'has' - 2081040
-                    'two' - 2107053
-                    'Jean' - 2273136
-
 
                                 </code>
-                                    </pre><img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
-			</section>
+                                    </pre>
+
+</section>
+
+
+
+
 			<section>
+				<h3>Recap</h3>
+
+				<ul>
+					<li> You can process fairly large amounts of data(5-10 GB) locally if you have a modern dev machine
+					<li> Use Multiprocessing if your code is amenable to it
+					<li> Structure your code for multiprocessing
+					<li> Try different Pool/Chunksize combinations to tweak
+					<li> PyPy!
+					</ul> 
+
+			</section>
+
+
+                               
+			</section>
+
+			<section>
+				<h3>The cost of a system</h3>
+				<img src="img/blowfish.png">
+				<br><img align="left" src="img/cost.png"> In some cases, an optimized single node is better than unoptimized multiple nodes. <a href="https://pdfs.semanticscholar.org/6753/959eed800e9fad9e330daae43f81b7a48017.pdf"><br>
+				Source</a>
+			</section>
+
+
+			<section>
+
+
 				<h4>MapReduce with Spark locally: <br>less code, more overhead</h4>
 
 				<div id="column1" style="float:left; width:50%;">
@@ -215,17 +386,7 @@
                                 </code>
                                     </pre><img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/spark_wordcount.py">GitHub</a>
 			</section>
-			<section>
-				<h4>How much more accuracy can big data give?</h4>
-				<div id="column1" style="float:left; width:50%;"><img align="left" src="img/margin_error.png"></div>
-				<div id="column2" style="float:left; width:50%;">
-					<pre><code>M.E. = 1/sqrt(n) 
-                            where n = population</code></pre><font size="5"></font>
-					<p align="left"><font size="5">Margin of error measures reliability of sample. If data is unbiased, difference between sample percent and true population percent will be within margin of error 95% of the time (likelihood). Margin of error does not substantially decrease at sample sizes above 1500 in the example.<a href="https://onlinecourses.science.psu.edu/stat100/node/17"><br>
-				source</a></font></p><font size="5"></font>
-				</div><br>
-				<img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data/blob/master/samplesize.py">Sample Size on GitHub</a>
-			</section>
+
 			<section>
 				
 				<h4>What big data can't give you</h4><img src="img/message-in-a-bottle.png"><br>
@@ -241,12 +402,7 @@
 				</ul>
 
 			</section>
-			<section>
-				<h3>The cost of a system</h3>
-				<img src="img/blowfish.png">
-				<br><img align="left" src="img/cost.png"> In some cases, an optimized single node is better than unoptimized multiple nodes. <a href="https://pdfs.semanticscholar.org/6753/959eed800e9fad9e330daae43f81b7a48017.pdf"><br>
-				Source</a>
-			</section>
+			
 			<section>
 				<h4>What big data can give you</h4><img src="img/whale-breathing.png">
 				<ul>
