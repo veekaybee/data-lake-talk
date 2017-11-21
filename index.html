@@ -30,7 +30,7 @@
 				<h2>About me</h2><span style="color:blue">Data Science + Engineering @ <a href="http://www.captechconsulting.com/">CapTech</a></span>
 				<center>
 					<br>
-					<p align="center">GitHub: <a href="https://github.com/veekaybee">@veekaybee</a><br></p>
+					<p align="center">GitHub: <a href="https://github.com/veekaybee">veekaybee</a><br></p>
 					<align left="">
 						Twitter: <a href="http://twitter.com/vboykis">@vboykis</a><br>
 						Website: <a href="http://www.vickiboykis.com">vickiboykis.com</a><br>
@@ -43,8 +43,8 @@
 						<ul>
 							<li>Your computer is good enough</li>
 							<li>You don't always have big data</li>
-							<li>Multiprocessing</li>
-							<li>Distributed system overhead</li>
+							<li>Multiprocessing makes it faster</li>
+							<li>When you actually need Big Data</li>
 						</ul>
 
 			</section>
@@ -53,7 +53,7 @@
 				<h4>"There is a time for every data environment"</h4>
 				<h4>-The Byrds, Probably</h4>
 				<img src="img/byrds.png" align="right">
-						<blockquote>
+						<quote><align ="left">
 							To everything (turn turn)<br>
 							There is a season (turn turn)<br>
 							And a time to every purpose<br>
@@ -62,7 +62,7 @@
 							A time for distributed systems<br>
 							A time for local processing<br>
 							A time for healing<br>
-						</blockquote>
+						</quote></align>
 						
 
 			</section>
@@ -156,38 +156,52 @@
 				</section>
 
 			<section>
-				<h3>At this file size, it's now easier to write Python</h3>
-				This is the heart of the algorithm
+				<h3>We should now write some Python</h3>
+
+
+				<ol>
+					<li> <pre><code>get_filenames</code>Read in all text files</pre>
+					<li> <pre><code>get_data</code>Do text processing (strip/split)</pre>
+						 <li> <pre><code>map_function</code>Count occurrences of words in each file</pre>
+						 <li> <pre><code>reduce_function</code>Sums up occurrences across files</pre>
+						 <li> <pre><code>show_items</code>Sorts results in descending order</pre>
+				</ol>	
+
+				</section>
+				<section>
+				<h3>The heart of map/reduce</h3>
 
 				<pre>
 					
                             <code class="python" data-trim="">
 					def map(words):
-					    """Inserts each word into a dictionary
-					    and counts them. 
-					    :param words: List of words
-					    """
-						result = {}
-						for i in words:
-						    try:
-						        result[i] += 1
-						    except KeyError:
-						        result[i] = 1
-						return(result)   
+					"""
+					Inserts each word into a dictionary
+					and counts them. 
+					:param words: List of words
+					"""
+					result = {}
+					
+					for i in words:
+						try:
+							result[i] += 1
+						except KeyError:
+							result[i] = 1
+					return(result)   
 
 					def reduce(dict_list):
-						"""Reduces a complete dictionary by summing values
-					    	:param words: List of words
-					    	"""
-						d = {}
-						for entry in dict_list:
-							print("merging dictionary...")
-							for k, v in entry.items():
-								try:
-									d[k] += v
-								except KeyError:
-									d[k] = v
-						return(d) 
+					"""
+					Reduces a complete dictionary by summing values
+					:param dict_list: List of words across files
+					"""
+					d = {}
+					for entry in dict_list:
+						for k, v in entry.items():
+							try:
+								d[k] += v
+							except KeyError:
+								d[k] = v
+					return(d) 
 						</code></pre><br>
 
 				<img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
@@ -355,7 +369,7 @@ PID    COMMAND      %CPU  TIME            STATE
 				
 
 				<pre>
-                            <code class="python" data-trim=""> mbp-vboykis:data_lake vboykis$ time ./bin/spark-submit --master local[5]/ spark_wordcount.py
+                            <code class="python" data-trim=""> mbp-vboykis$ ./bin/spark-submit --master local[5]/spark_wc.py
                             </code>
                                     </pre>
 			</section>
@@ -392,8 +406,7 @@ PID    COMMAND      %CPU  TIME            STATE
 						</ul>
 					</li>
 					<li>SQL Query analyst speed</li>
-					<li>Traditional data guarantees (consistency)</li>
-					<li>Not a transactional database</li>
+					<li>Traditional database guarantees (consistency)</li>
 				</ul>
 
 			</section>
@@ -421,48 +434,8 @@ PID    COMMAND      %CPU  TIME            STATE
 
 				</ul>
 			</section>
-			<section>
-				<h3>Good use cases for Hadoop</h3>
-				<div id="column1" style="float:left; width:50%;">
-					<a href="http://techblog.netflix.com/2014/10/using-presto-in-our-big-data-platform.html">Netflix</a><br>
 
-
-					
-					<ul>
-						<li>10 PB warehouse.
-						<li>2500 queries a day.<br></li>
-						<li>10 million -&gt; 80 million members<br></li>
-						<li>Thousands of devices, each with their own app</li>
-						<li>Need to analyze user intent, uptime</li>
-					</ul></a></font>
-				</div>
-				<div id="column2" style="float:right; width:50%;">
-					<a href="http://www.sdss.org/">Sloan Digital Sky Survey</a> 
-
-					    
-					    <ul><li>Most detailed three-dimensional maps of the universe
-						<li>250 mil stars, 208 mil galaxies<br></li>
-						<li>Conduct sky measurement, stitch together sky maps</li></ul>
-						</font><br>
-				</div>
-			</section>
-			<section>
-				<h2>Hadoop Optimizations</h2><img src="img/fishing.png">
-				<ul>
-					<li>Admin Optimization</li>
-						<ul>
-						<li>Naming Conventions (HDFS - filesystem)</li>
-						<li>Security (Authentication, Authorization, OS)</li>
-						<li>Team size</li>
-					</ul>	
-				  <li>Hadoop Internals</li>
-				  <ul>
-					<li>File Formats</li>
-					<li>Language Optimization</li></ul>
-				</ul>
-					
-				</ul>
-			</section>
+			
 
 
 
@@ -478,7 +451,8 @@ PID    COMMAND      %CPU  TIME            STATE
 					<li><a href= "https://www.chrisstucchio.com/blog/2013/hadoop_hatred.html">Don't use Hadoop - your data isn't that big</a>
 					</li>
 					<li><a href= "https://github.com/aphyr/distsys-class/blob/master/README.markdown">An introduction to distributed systems</a>
-						<li><a href= "https://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Spark Trends 2017</a>
+
+						<li><a href= "https://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Multithreading and Python</a>
 							<li><a href= "https://www.quora.com/What-is-the-best-directory-structure-to-store-different-types-of-logs-in-HDFS-over-the-time">Directory Structure for HDFS</a>
 
 							
