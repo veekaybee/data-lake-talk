@@ -1,97 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-	<title>It Came from the Data Lake</title>
-	<link href="css/reveal.css" rel="stylesheet">
-	<link href="css/theme/white.css" rel="stylesheet"><!-- Theme used for syntax highlighting of code -->
-	<link href="lib/css/zenburn.css" rel="stylesheet"><!-- Printing and PDF exports -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <title>It Came from the Data Lake</title>
+    <link href="css/reveal.css" rel="stylesheet">
+    <link href="css/theme/white.css" rel="stylesheet"><!-- Theme used for syntax highlighting of code -->
+    <link href="lib/css/zenburn.css" rel="stylesheet"><!-- Printing and PDF exports -->
 
-	<script>
-	           var link = document.createElement( 'link' );
-	           link.rel = 'stylesheet';
-	           link.type = 'text/css';
-	           link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-	           document.getElementsByTagName( 'head' )[0].appendChild( link );
-	</script>
+    <script>
+               var link = document.createElement( 'link' );
+               link.rel = 'stylesheet';
+               link.type = 'text/css';
+               link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+               document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 </head>
 <body>
-	<div class="reveal">
-		<div class="slides">
-			<section>
-				<h3>Replace Hadoop with Your Laptop</h2><span style="color:blue">The Case for Multiprocessing </span>
-				<br>Vicki Boykis @vboykis
-				<center>
-					<img src="img/snakelephant.png">
-				</center>
-			</section>
-			<section>
-				<h2>About me</h2><span style="color:blue">Data Science + Engineering @ <a href="http://www.captechconsulting.com/">CapTech</a></span>
-				<center>
-					<br>
-					<p align="center">GitHub: <a href="https://github.com/veekaybee">veekaybee</a><br></p>
-					<align left="">
-						Twitter: <a href="http://twitter.com/vboykis">@vboykis</a><br>
-						Website: <a href="http://www.vickiboykis.com">vickiboykis.com</a><br>
-						<img align="center" src="img/stack.png">
-					</align>
-				</center>
-			</section>
-			<section>
-				<h2>Agenda<br><img src="img/snake.png"><br></h2>
-						<ul>
-							<li>Your computer is good enough</li>
-							<li>You don't always have big data</li>
-							<li>Multiprocessing makes it faster</li>
-							<li>When you actually need Big Data</li>
-						</ul>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h3>Replace Hadoop with Your Laptop</h2><span style="color:blue"></span>
+                Vicki Boykis | @vboykis
+                <br> <a href="https://veekaybee.github.io/data-lake-talk">
+                https://veekaybee.github.io/data-lake-talk</a>
+                <center>
+                    <img src="img/snakelephant.png">
+                </center>
+            </section>
+            <section>
+                <h2>About me</h2><span style="color:blue">Data Science + Engineering @ <a href="http://www.captechconsulting.com/">CapTech</a></span>
+                <center>
+                    <br>
+                    <p align="center">GitHub: <a href="https://github.com/veekaybee">veekaybee</a><br></p>
+                    <align left="">
+                        Twitter: <a href="http://twitter.com/vboykis">@vboykis</a><br>
+                        Website: <a href="http://www.vickiboykis.com">vickiboykis.com</a><br>
+                        <img align="center" src="img/stack.png">
+                    </align>
+                </center>
+            </section>
+            <section>
+                <h2>Agenda<br><img src="img/snake.png"><br></h2>
+                        <ul>
+                            <li>Your computer is good enough</li>
+                            <li>You don't always have big data</li>
+                            <li>Multiprocessing makes it faster</li>
+                            <li>When you actually need Big Data</li>
+                        </ul>
 
-			</section>
+            </section>
 
-			<section>
-				<h4>"There is a time for every data environment"</h4>
-				<h4>-The Byrds, Probably</h4>
-				<img src="img/byrds.png" align="right">
-						<quote><align ="left">
-							To everything (turn turn)<br>
-							There is a season (turn turn)<br>
-							And a time to every purpose<br>
-							A time to laugh<br>
-							A time to cry<br>
-							A time for distributed systems<br>
-							A time for local processing<br>
-							A time for healing<br>
-						</quote></align>
-						
+            <section>
+                <h4>"There is a time for every data environment"</h4>
+                <h4>-The Byrds, Probably</h4>
+                <img src="img/byrds.png" align="right">
+                        <quote><align ="left">
+                            To everything (turn turn)<br>
+                            There is a season (turn turn)<br>
+                            And a time to every purpose<br>
+                            A time to laugh<br>
+                            A time to cry<br>
+                            A time for distributed systems<br>
+                            A time for local processing<br>
+                            A time for healing<br>
+                        </quote></align>
+                        
 
-			</section>
-				<section>
-				<h2>My computing environment<br><img src="img/environment.png"><br></h2>
+            </section>
+                <section>
+                <h2>My computing environment<br><img src="img/environment.png"><br></h2>
 
-			</section>
-			<section>
-				<h3>You don't always have big data</h3><img src="img/bigdata.png">
-				<br>And, how frequently are you processing these sizes of data? 
-			</section>
+            </section>
+            <section>
+                <h3>You don't always have big data</h3><img src="img/bigdata.png">
+                <br>And, how frequently are you processing these sizes of data? 
+            </section>
 
-			<section>
-				<h3>How much data can your laptop process?</h3>
-				<ul>
-					<li style="list-style: none"><font size="+3"></font></li>
-					
-					<li><font size="+3"><a href="https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion records on one machine in less than 1 second."</font></li>
-					<li><font size="+3"><a href="https://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html">Command Line:</a> 1.75GB containing around 2 million chess games. "This <code>find | xargs mawk | mawk</code> pipeline gets us down to a runtime of about 12 seconds, or about 270MB/sec, which is around 235 times faster than the Hadoop implementation."</font></li>
-				</ul><font size="+3"></font>
-			</section>
-			<section>
-				<h3>Les MapReduces – Word count exercise</h3><img src="img/lesmapreduces.png"> <a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
-			</section>
+            <section>
+                <h3>How much data can your laptop process?</h3>
+                <ul>
+                    <li style="list-style: none"><font size="+3"></font></li>
+                    
+                    <li><font size="+3"><a href="https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion records on one machine in less than 1 second."</font></li>
+                    <li><font size="+3"><a href="https://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html">Command Line:</a> 1.75GB containing around 2 million chess games. "This <code>find | xargs mawk | mawk</code> pipeline gets us down to a runtime of about 12 seconds, or about 270MB/sec, which is around 235 times faster than the Hadoop implementation."</font></li>
+                </ul><font size="+3"></font>
+            </section>
+            <section>
+                <h3>Les MapReduces – Word count exercise</h3><img src="img/lesmapreduces.png"> <a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
+            </section>
 
-			
-			<section>
-				<h2>Checking out the file</h2>
-				<pre>
+            
+            <section>
+                <h2>Checking out the file</h2>
+                <pre>
                             <code class="bash" data-trim="">
                     vboykis$ head -n 1000  lesmiserables.txt
 
@@ -100,10 +102,10 @@
                     That same evening the Bishop wrote out and handed to his sister a memorandum conceived in the following terms:--
                                 </code>
                                     </pre>
-			</section>
-			<section>
-				<h3>Command line MapReduce</h3>
-				<pre>
+            </section>
+            <section>
+                <h3>Command line MapReduce</h3>
+                <pre>
                             <code class="bash" data-trim="">
                     sed -e 's/[^[:alpha:]]/ /g' lesmiserables.txt \ # only alpha 
                                     | tr '\n' " " \ # replace lines with spaces
@@ -124,124 +126,149 @@
                                 </code>
                             </pre>
                                    
-			</section>
+            </section>
 
-			<section> <h3>Let's say we have lots of files</h3>
-
-
-					<pre>
-				        <code class="bash" data-trim="">
-
-						# Makes n number of copies of Les Miserables
-
-						INPUT=lesmiserables.txt
-						for num in $(seq 1 1000)
-						do
-						    bn=$(basename $INPUT .txt)
-						    cp $INPUT $bn$num.txt
-						done
-				        </code> 
-
-						<code class="bash" data-trim="">
-						#Before
-						mbp-vboykis:data-lake-code vboykis$ du -sh 
-						3.3M
-						#After
-						mbp-vboykis:data-lake-code vboykis$ du -sh 
-						3.2G
-						</code> 
-
-						<h3>Let's say we have a large file.</h3>
-
-				</section>
-
-			<section>
-				<h3>We should now write some Python</h3>
+            <section> <h3>Let's say we have lots of files</h3>
 
 
-				<ol>
-					<li> <pre><code>get_filenames</code>Read in all text files</pre>
-					<li> <pre><code>get_data</code>Do text processing (strip/split)</pre>
-						 <li> <pre><code>map_function</code>Count occurrences of words in each file</pre>
-						 <li> <pre><code>reduce_function</code>Sums up occurrences across files</pre>
-						 <li> <pre><code>show_items</code>Sorts results in descending order</pre>
-				</ol>	
+                    <pre>
+                        <code class="bash" data-trim="">
 
-				</section>
-				<section>
-				<h3>The heart of map/reduce</h3>
+                        # Makes n number of copies of Les Miserables
 
-				<pre>
-					
+                        INPUT=lesmiserables.txt
+                        for num in $(seq 1 1000)
+                        do
+                            bn=$(basename $INPUT .txt)
+                            cp $INPUT $bn$num.txt
+                        done
+                        </code> 
+
+                        <code class="bash" data-trim="">
+                        #Before
+                        mbp-vboykis:data-lake-code vboykis$ du -sh 
+                        3.3M
+                        #After
+                        mbp-vboykis:data-lake-code vboykis$ du -sh 
+                        3.2G
+                        </code> 
+
+                        
+
+                </section>
+
+            <section>
+                <h3>We should now write some Python</h3>
+
+
+                <ol>
+                    <li> <pre><code>get_filenames</code>Read in all text files</pre>
+                    <li> <pre><code>get_data</code>Do text processing (strip/split)</pre>
+                         <li> <pre><code>map_function</code>Count occurrences of words in each file</pre>
+                         <li> <pre><code>reduce_function</code>Sums up occurrences across files</pre>
+                         <li> <pre><code>show_items</code>Sorts results in descending order</pre>
+                </ol>    
+
+                </section>
+                <section>
+                <h3>The heart of map/reduce</h3>
+
+                <pre>
+                    
                             <code class="python" data-trim="">
-					def map(words):
-					"""
-					Inserts each word into a dictionary
-					and counts them. 
-					:param words: List of words
-					"""
-					result = {}
-					
-					for i in words:
-						try:
-							result[i] += 1
-						except KeyError:
-							result[i] = 1
-					return(result)   
+                    def map(words):
+                    """
+                    Inserts each word into a dictionary
+                    and counts them. 
+                    :param words: List of words
+                    """
+                    result = {}
+                    
+                    for i in words:
+                        try:
+                            result[i] += 1
+                        except KeyError:
+                            result[i] = 1
+                    return result   
 
-					def reduce(dict_list):
-					"""
-					Reduces a complete dictionary by summing values
-					:param dict_list: List of words across files
-					"""
-					d = {}
-					for entry in dict_list:
-						for k, v in entry.items():
-							try:
-								d[k] += v
-							except KeyError:
-								d[k] = v
-					return(d) 
-						</code></pre><br>
+                    def reduce(dict_list):
+                    """
+                    Reduces a complete dictionary by summing values
+                    :param dict_list: List of words across files
+                    """
+                    d = {}
+                    for entry in dict_list:
+                        for k, v in entry.items():
+                            try:
+                                d[k] += v
+                            except KeyError:
+                                d[k] = v
+                    return d 
+                        </code></pre><br>
+                        <img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
+</section>    
+                <section>
+                <h3>The heart of map/reduce</h3>
 
-				<img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
-			</section>
+                <pre>
+                    
+                            <code  data-trim="">
+                map: {'Valjean': 5, 'Marius': 2, 'Javert': 3}
+                     {'Valjean': 4, 'Marius': 1, 'Javert': 4}
 
-			<section> 
-				<h2>How long does it take? 
-					<br>Killed after 13 minutes</h2>
-						<pre>
-						<code class="python" data-trim="">
+                reduce: {'Valjean': 9, 'Marius':3, 'Javert': 7}
+
+                </code></pre>
+
+                
+            </section>
+
+            <section> 
+                <h2>How long does it take? 
+                    <br>3 GB = 5 minutes</h2>
+                        <pre>
+                        <code class="python" data-trim="">
+
+append_dict = {}
+files = get_filenames()
+for filename in files: 
+    mapr = map_function(filename)
+    append_dict.update(mapr)
+
+mr = reduce_function(mapr)
+show_items(mr)
 
 mbp-vboykis:data-lake-code vboykis$ time python mapreduce.py 
-Size of files: 6.195150626823306 GB
+Size of files: 3.099123327061534 GB
 Processing textfiles...
 [1]+  Stopped  python3 mapreduce.py
-real	13m17.698s
-				</code></pre>
+real    5m14.605s
+                </code></pre>
 
-				</section>
+                </section>
 
-				<section> <h2>How do we speed it up?<h2> 
+                <section> <h2>How do we speed it up?<h2> 
 
-					🎉 Multiprocessing!🎉 
-					<br>(and 🐍PyPy🐍)
+                    🎉 Multiprocessing!🎉 
+                    <br>(and 🐍PyPy🐍)
 
-					</section>
+                    </section>
 
-					<section> <h3>What are threads and processes? </h3> 
-						(And what's a GIL?)<br>
+                    <section> <h3>What are threads and processes? </h3> 
+                        (And what's a GIL?)<br>
 
-						<img src="img/gil.png">
-						
+                        <img src="img/gil.png">
+                        
 
-				</section>
+                </section>
 
 
-					<section> <h3>How Python Utilizes Hardware</h3> 
+                    <section> <h3>How Python Utilizes Hardware</h3> 
 
-						<pre>
+                        <pre>
 <code class="python" data-trim="">
+
+
 vboykis$ python mapreduce.py
 vboykis$ top
 PID    COMMAND      %CPU  TIME            STATE
@@ -249,47 +276,47 @@ PID    COMMAND      %CPU  TIME            STATE
 </code></pre>
 
 
-				<img src="img/threadscores.png">
-			</section>
+                <img src="img/threadscores.png">
+            </section>
 
-			<section> <h2>Multiprocessing API</h2> 
-				
-				<div align="left">
-				<p>
-				<font size="6" align="left"><b>Process:</b> Each function call is a separate process (good for small programs)<br>
-				<br><b>Pool:</b> Allows you to control number of processes, maintains order of returned results</font></p></div>
-				<img src="img/processpool.png">
+            <section> <h2>Multiprocessing API</h2> 
+                
+                <div align="left">
+                <p>
+                <font size="6" align="left"><b>Process:</b> Each function call is a separate process (good for small programs)<br>
+                <br><b>Pool:</b> Allows you to control number of processes, maintains order of returned results</font></p></div>
+                <img src="img/processpool.png">
 
-				</section>
+                </section>
 
-			<section>
+            <section>
 
-				
-				<h3>Our Multiprocessing Code</h3>
-				<pre>
+                
+                <h3>Our Multiprocessing Code</h3>
+                <pre>
                             <code class="python" data-trim="">
 
-	files = get_filenames()
-	pool= Pool(processes=5) 
-	result_set = pool.map(map_function, files, chunksize=30) 
-	show_items(reduce_function(result_set))
+    files = get_filenames()
+    pool= Pool(processes=5) 
+    result_set = pool.map(map_function, files, chunksize=30) 
+    show_items(reduce_function(result_set))
 
-	PID    COMMAND      %CPU TIME     #TH    
-	32984  Python       94.4 01:16.48 1/1    
-	32983  Python       94.8 01:14.76 1/1   
-	32982  Python       77.4 01:17.70 1/1   
-	32981  Python       95.2 01:15.60 1/1   
-	32980  Python       96.9 01:14.00 1/1    
+    PID    COMMAND      %CPU TIME     #TH    
+    32984  Python       94.4 01:16.48 1/1    
+    32983  Python       94.8 01:14.76 1/1   
+    32982  Python       77.4 01:17.70 1/1   
+    32981  Python       95.2 01:15.60 1/1   
+    32980  Python       96.9 01:14.00 1/1    
 
                                 </code>
                                     </pre><img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
-			</section>
+            </section>
 
-	<section>
-				<h3>Our Multiprocessing Code</h3>
-				<pre>
+    <section>
+                <h3>Our Multiprocessing Code</h3>
+                <pre>
 
-					 <code class="python" data-trim="">
+                     <code class="python" data-trim="">
 
                     pool= Pool(processes=5)
                     result_set = pool.map(map_function, get_filenames(), chunksize=30)
@@ -297,13 +324,13 @@ PID    COMMAND      %CPU  TIME            STATE
                     mbp-vboykis:data_lake vboykis$ time mapreduce.py
                     ('Size of files:', 3.099123327061534, 'GB')
                     
-                    real	2m13.120s  user	8m47.443ssys	0m24.635s
+                    real    2m13.120s  user    8m47.443ssys    0m24.635s
 
                     mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
 
                     "“If you want your code to run faster, you should probably just use PyPy.” — Guido"
 
-                    real	2m10.799s  user	6m28.577s  sys	0m42.156s
+                    real    2m10.799s  user    6m28.577s  sys    0m42.156s
                     ('Size of files:', 3.099123327061534, 'GB')
 
                     mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
@@ -330,52 +357,52 @@ PID    COMMAND      %CPU  TIME            STATE
 
 
 
-			<section>
-				<h3>Recap</h3>
+            <section>
+                <h3>Recap</h3>
 
-				<ul>
-					<li> You can process fairly large amounts of data(5-10 GB) locally if you have a modern dev machine
-					<li> Use Multiprocessing if your code is amenable to it
-					<li> Structure your code for multiprocessing
-					<li> Try different Pool/Chunksize combinations to tweak
-					<li> PyPy!
-					</ul> 
+                <ul>
+                    <li> You can process fairly large amounts of data(5-10 GB) locally 
+                    <li> Use multiprocessing if it makes sense
+                    <li> Structure your code for multiprocessing
+                    <li> Try different Pool/Chunksize combinations to tweak
+                    <li> PyPy!
+                    </ul> 
 
-			</section>
+            </section>
                                
 
 
-			<section>
-				<h3>The cost of a system</h3>
-				<img src="img/blowfish.png">
-				<br><img align="left" src="img/cost.png"> In some cases, an optimized single node is better than unoptimized multiple nodes. <a href="https://pdfs.semanticscholar.org/6753/959eed800e9fad9e330daae43f81b7a48017.pdf"><br>
-				Source</a>
-			</section>
+            <section>
+                <h3>The cost of a system</h3>
+                <img src="img/blowfish.png">
+                <br><img align="left" src="img/cost.png"> In some cases, an optimized single node is better than unoptimized multiple nodes. <a href="https://pdfs.semanticscholar.org/6753/959eed800e9fad9e330daae43f81b7a48017.pdf"><br>
+                Source</a>
+            </section>
 
 
-			<section>
+            <section>
 
 
-				<h4>MapReduce with Spark locally: <br>less code, more overhead</h4>
+                <h4>MapReduce with Spark locally: <br>less code, more overhead</h4>
 
-				<div id="column1" style="float:left; width:50%;">
-				<img src="img/threads.png"> 
-				<a href="http://www.python-course.eu/threads.php"><br>
-				<font size="-1">source</font></a> </div>
+                <div id="column1" style="float:left; width:50%;">
+                <img src="img/threads.png"> 
+                <a href="http://www.python-course.eu/threads.php"><br>
+                <font size="-1">source</font></a> </div>
 
-				<div id="column2" style="float:left; width:50%;">
-				<img src="img/spark-local-architecture.png"> 
-				<a href="https://jaceklaskowski.gitbooks.io/mastering-apache-spark/content/spark-local.html"><font size="-1">source</font></a></div>
-				
+                <div id="column2" style="float:left; width:50%;">
+                <img src="img/spark-local-architecture.png"> 
+                <a href="https://jaceklaskowski.gitbooks.io/mastering-apache-spark/content/spark-local.html"><font size="-1">source</font></a></div>
+                
 
-				<pre>
+                <pre>
                             <code class="python" data-trim=""> mbp-vboykis$ ./bin/spark-submit --master local[5]/spark_wc.py
                             </code>
                                     </pre>
-			</section>
-			<section>
-				<h4>MapReduce with Spark</h4>
-				<pre>
+            </section>
+            <section>
+                <h4>MapReduce with Spark</h4>
+                <pre>
                             <code class="python" data-trim=""> 
                            
 
@@ -394,99 +421,98 @@ PID    COMMAND      %CPU  TIME            STATE
                     sc.stop()
                                 </code>
                                     </pre><img align="middle" src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/spark_wordcount.py">GitHub</a>
-			</section>
+            </section>
 
-			<section>
-				
-				<h4>What big data can't give you</h4><img src="img/message-in-a-bottle.png"><br>
-				<ul>
-					<li>Data integrity
-						<ul>
-							<li>(denormalized, naming conventions)</li>
-						</ul>
-					</li>
-					<li>SQL Query analyst speed</li>
-					<li>Traditional database guarantees (consistency)</li>
-				</ul>
+            <section>
+                
+                <h4>What big data can't give you</h4><img src="img/message-in-a-bottle.png"><br>
+                <ul>
+                    <li>Data integrity
+                        <ul>
+                            <li>(denormalized, naming conventions)</li>
+                        </ul>
+                    </li>
+                    <li>SQL Query analyst speed</li>
+                    <li>Traditional database guarantees (consistency)</li>
+                </ul>
 
-			</section>
-			
-			<section>
-				<h4>What big data can give you</h4><img src="img/whale-breathing.png">
-				<ul>
-					<li>Storage of unstructured data</li>
-					<li>Fault tolerance and availability</li>
-					<li>A centralized place across departments</li>
-					<li>Extremely heavy parallelized usage</li>
-					<li>Ability to programmatically work with data</li>
-				</ul>
-			</section>
-			<section>
-				<h3>Good use cases for Hadoop</h3><img src="img/elephant.png">
-				<ul>
-					<li> A lot of data (more than 1 TB and growing)
-					<li>Unstructured data (images, video, <a href="https://twitter.com/denormalize/status/832442855683616768">metadata</a>) </li>
-					<li>Streaming data that needs to be stored quickly (logs) </li>
-					<li>Many researchers need access in parallel</li>
-					<li>You need to access and analyze ALL THE DATA </li>
-					<li>You have a dedicated team of people to work on it 
-						(@ least 1-2 dev, 1 admin, 1 analyst)</li><br>
+            </section>
+            
+            <section>
+                <h4>What big data can give you</h4><img src="img/whale-breathing.png">
+                <ul>
+                    <li>Storage of unstructured data</li>
+                    <li>Fault tolerance and availability</li>
+                    <li>A centralized place across departments</li>
+                    <li>Extremely heavy parallelized usage</li>
+                    <li>Ability to programmatically work with data</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Good use cases for Hadoop</h3><img src="img/elephant.png">
+                <ul>
+                    <li> A lot of data (more than 1 TB and growing)
+                    <li>Unstructured data (images, video, <a href="https://twitter.com/denormalize/status/832442855683616768">metadata</a>) </li>
+                    <li>Streaming data that needs to be stored quickly (logs) </li>
+                    <li>Many researchers need access in parallel</li>
+                    <li>You need to access and analyze ALL THE DATA </li>
+                    <li>You have a dedicated team of people to work on it 
+                        (@ least 1-2 dev, 1 admin, 1 analyst)</li><br>
 
-				</ul>
-			</section>
+                </ul>
+            </section>
 
-			
-
-
-
-			<section>
-				<h2>Resources</h2>
-
-				<div align="center">
-
-				Icons: made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> <br>from <a href=http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> <br>are licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0">CC 3.0 </a><br>
+            
 
 
-				<ul>Links:
-					<li><a href= "https://www.chrisstucchio.com/blog/2013/hadoop_hatred.html">Don't use Hadoop - your data isn't that big</a>
-					</li>
-					<li><a href= "https://github.com/aphyr/distsys-class/blob/master/README.markdown">An introduction to distributed systems</a>
 
-						<li><a href= "https://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Multithreading and Python</a>
-							<li><a href= "https://www.quora.com/What-is-the-best-directory-structure-to-store-different-types-of-logs-in-HDFS-over-the-time">Directory Structure for HDFS</a>
+            <section>
+                <h2>Resources</h2>
 
-							
+                <div align="center">
 
-					</li>
-				</ul>
-			</div>
+                Icons: made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> <br>from <a href=http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> <br>are licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0">CC 3.0 </a><br>
 
-			
 
-			</section>
-		</div>
-	</div>
-	<script src="lib/js/head.min.js">
-	</script> 
-	<script src="js/reveal.js">
-	</script> 
-	<script>
-	           // More info https://github.com/hakimel/reveal.js#configuration
-	           Reveal.initialize({
-	               history: true,
+                <ul>Links:
+                    <li><a href= "https://www.chrisstucchio.com/blog/2013/hadoop_hatred.html">Don't use Hadoop - your data isn't that big</a>
+                    </li>
+                    <li><a href= "https://github.com/aphyr/distsys-class/blob/master/README.markdown">An introduction to distributed systems</a>
 
-	               transition: 'none',
+                        <li><a href= "https://www.slideshare.net/databricks/spark-summit-east-2017-matei-zaharia-keynote-trends-for-big-data-and-apache-spark-in-2017">Multithreading and Python</a>
+                            
+                            
 
-    				slideNumber: true,
+                    </li>
+                </ul>
+            </div>
 
-	               // More info https://github.com/hakimel/reveal.js#dependencies
-	               dependencies: [
-	                   { src: 'plugin/markdown/marked.js' },
-	                   { src: 'plugin/markdown/markdown.js' },
-	                   { src: 'plugin/notes/notes.js', async: true },
-	                   { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-	               ]
-	           });
-	</script>
+            
+
+            </section>
+        </div>
+    </div>
+    <script src="lib/js/head.min.js">
+    </script> 
+    <script src="js/reveal.js">
+    </script> 
+    <script>
+               // More info https://github.com/hakimel/reveal.js#configuration
+               Reveal.initialize({
+                   history: true,
+
+                   transition: 'none',
+
+                    slideNumber: true,
+
+                   // More info https://github.com/hakimel/reveal.js#dependencies
+                   dependencies: [
+                       { src: 'plugin/markdown/marked.js' },
+                       { src: 'plugin/markdown/markdown.js' },
+                       { src: 'plugin/notes/notes.js', async: true },
+                       { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                   ]
+               });
+    </script>
 </body>
 </html>
