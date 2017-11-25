@@ -21,9 +21,9 @@
         <div class="slides">
             <section>
                 <h3>Replace Hadoop with Your Laptop</h2><span style="color:blue"></span>
+                	<h3> 🐍Multiprocessing🐍</h3>
                 Vicki Boykis | @vboykis
-                <br> <a href="https://veekaybee.github.io/data-lake-talk">
-                https://veekaybee.github.io/data-lake-talk</a>
+
                 <center>
                     <img src="img/snakelephant.png">
                 </center>
@@ -46,7 +46,7 @@
                             <li>Your computer is good enough</li>
                             <li>You don't always have big data</li>
                             <li>Multiprocessing makes it faster</li>
-                            <li>When you actually need Big Data</li>
+                            <li>When you need distributed systems</li>
                         </ul>
 
             </section>
@@ -69,12 +69,23 @@
 
             </section>
                 <section>
-                <h2>My computing environment<br><img src="img/environment.png"><br></h2>
+                <h2>My local environment<br></h2>
+                	<img src="img/environment.png" height="300" width="500">
+                <img src="img/threadscores.png" height="300" width="500">
 
+
+
+
+            </section>
+
+
+              <section>
+                <h3>Boss: "Please analyze Les MapReduces for me"</h3>
+<a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
+                <img src="img/lesmapreduces.png"> 
             </section>
             <section>
                 <h3>You don't always have big data</h3><img src="img/bigdata.png">
-                <br>And, how frequently are you processing these sizes of data? 
             </section>
 
             <section>
@@ -82,13 +93,11 @@
                 <ul>
                     <li style="list-style: none"><font size="+3"></font></li>
                     
-                    <li><font size="+3"><a href="https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion records on one machine in less than 1 second."</font></li>
+                    <li><font size="+3"><a href="https://databricks.com/blog/2016/05/23/apache-spark-as-a-compiler-joining-a-billion-rows-per-second-on-a-laptop.html">Databricks Tungsten:</a> "Aggregation and joins on one billion records on one machine in less than 1 second." (2013 Macbook Pro)</font></li>
                     <li><font size="+3"><a href="https://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html">Command Line:</a> 1.75GB containing around 2 million chess games. "This <code>find | xargs mawk | mawk</code> pipeline gets us down to a runtime of about 12 seconds, or about 270MB/sec, which is around 235 times faster than the Hadoop implementation."</font></li>
                 </ul><font size="+3"></font>
             </section>
-            <section>
-                <h3>Les MapReduces – Word count exercise</h3><img src="img/lesmapreduces.png"> <a href="http://www.gutenberg.org/ebooks/135">Les Miserables</a> - 655k words / 3.2 MB textfile
-            </section>
+          
 
             
             <section>
@@ -146,10 +155,10 @@
 
                         <code class="bash" data-trim="">
                         #Before
-                        mbp-vboykis:data-lake-code vboykis$ du -sh 
+                        vboykis$ du -sh 
                         3.3M
                         #After
-                        mbp-vboykis:data-lake-code vboykis$ du -sh 
+                        vboykis$ du -sh 
                         3.2G
                         </code> 
 
@@ -159,6 +168,8 @@
 
             <section>
                 <h3>We should now write some Python</h3>
+
+                <center><code>mapreduce.py</code></center>
 
 
                 <ol>
@@ -176,11 +187,11 @@
                 <pre>
                     
                             <code class="python" data-trim="">
-                    def map(words):
+                    def map(filename):
                     """
-                    Inserts each word into a dictionary
-                    and counts them. 
-                    :param words: List of words
+                    Takes a list of sentences,splits, 
+                    and sums up words per sentence
+                    :param filename: a single filename
                     """
                     result = {}
                     
@@ -191,10 +202,10 @@
                             result[i] = 1
                     return result   
 
-                    def reduce(dict_list):
+                    def reduce_function(dict_list):
                     """
                     Reduces a complete dictionary by summing values
-                    :param dict_list: List of words across files
+                    :param dict_list: List of words 
                     """
                     d = {}
                     for entry in dict_list:
@@ -213,10 +224,10 @@
                 <pre>
                     
                             <code  data-trim="">
-                map: {'Valjean': 5, 'Marius': 2, 'Javert': 3}
-                     {'Valjean': 4, 'Marius': 1, 'Javert': 4}
+                map: {'valjean': 5, 'marius': 2, 'javert': 3}
+                     {'valjean': 4, 'marius': 1, 'javert': 4}
 
-                reduce: {'Valjean': 9, 'Marius':3, 'Javert': 7}
+                reduce: {'valjean': 9, 'marius':3, 'javert': 7}
 
                 </code></pre>
 
@@ -225,7 +236,7 @@
 
             <section> 
                 <h2>How long does it take? 
-                    <br>3 GB = 5 minutes</h2>
+                    <br> 3 GB = 5 minutes</h2>
                         <pre>
                         <code class="python" data-trim="">
 
@@ -238,10 +249,10 @@ for filename in files:
 mr = reduce_function(mapr)
 show_items(mr)
 
-mbp-vboykis:data-lake-code vboykis$ time python mapreduce.py 
+vboykis$ time python mapreduce.py 
 Size of files: 3.099123327061534 GB
 Processing textfiles...
-[1]+  Stopped  python3 mapreduce.py
+[1]+  Stopped  python mapreduce.py
 real    5m14.605s
                 </code></pre>
 
@@ -255,7 +266,7 @@ real    5m14.605s
                     </section>
 
                     <section> <h3>What are threads and processes? </h3> 
-                        (And what's a GIL?)<br>
+                        (And what's a GIL?)
 
                         <img src="img/gil.png">
                         
@@ -271,7 +282,7 @@ real    5m14.605s
 
 vboykis$ python mapreduce.py
 vboykis$ top
-PID    COMMAND      %CPU  TIME            STATE
+PID    COMMAND      %CPU  TIME     #TH       STATE
 32057  Python       99.0  00:04.16 1/1    running
 </code></pre>
 
@@ -293,6 +304,18 @@ PID    COMMAND      %CPU  TIME            STATE
 
                 
                 <h3>Our Multiprocessing Code</h3>
+
+
+ 			<pre>
+                 <code class="python" data-trim="">
+                p.map(func, iterable[, chunksize])
+
+                # parallel equivalent of map function
+                # iterable is split into pieces of approx that size
+                # submitted to process pool as separate tasks 
+				</code>
+                                </pre>	
+
                 <pre>
                             <code class="python" data-trim="">
 
@@ -321,33 +344,41 @@ PID    COMMAND      %CPU  TIME            STATE
                     pool= Pool(processes=5)
                     result_set = pool.map(map_function, get_filenames(), chunksize=30)
 
-                    mbp-vboykis:data_lake vboykis$ time mapreduce.py
+                    vboykis$ time mapreduce.py
                     ('Size of files:', 3.099123327061534, 'GB')
                     
-                    real    2m13.120s  user    8m47.443ssys    0m24.635s
+                    real    2m56.571s  user    11m54.280s    0m29.430s
+                    'valjean' - 790790
+                    'marius' - 909909
+                    'jean' - 1143142
 
-                    mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+                    </code>
+                                    </pre>
+					</section>
 
-                    "“If you want your code to run faster, you should probably just use PyPy.” — Guido"
+					 <section>
+
+					<h3>Speeding it up with PyPy</h3>
+
+                    <p>"If you want your code to run faster, you should probably just use PyPy.” — Guido"
+						
+                    	<p>
+					PyPy is an alternate compiler (over CPython).  Good for:
+					+ longer processes
+					+ mostly Python codebases
+<pre>
+                     <code class="python" data-trim="">
+                    vboykis$ time pypy mapreduce.py
 
                     real    2m10.799s  user    6m28.577s  sys    0m42.156s
                     ('Size of files:', 3.099123327061534, 'GB')
 
-                    mbp-vboykis:data_lake vboykis$ time pypy mapreduce.py
+                    vboykis$ time pypy mapreduce.py
                     ('Size of files:', 6.195150626823306, 'GB')
 
                     real    4m23.917suser 12m6.691ssys  1m39.279s
 
-                    Valjean' - 1552776
-                    'out' - 1580790
-                    'little' - 1682841
-                    'its' - 1726863
-                    'than' - 1728864
-                    'like' - 1804902
-                    'very' - 1806903
-                    'or' - 1812906
-                    'A' - 1812906
-                    'Marius' - 1812906
+                   
 
                                 </code>
                                     </pre>
@@ -362,9 +393,8 @@ PID    COMMAND      %CPU  TIME            STATE
 
                 <ul>
                     <li> You can process fairly large amounts of data(5-10 GB) locally 
-                    <li> Use multiprocessing if it makes sense
                     <li> Structure your code for multiprocessing
-                    <li> Try different Pool/Chunksize combinations to tweak
+                    <li> Try different Pool/Chunksize combinations 
                     <li> PyPy!
                     </ul> 
 
@@ -467,11 +497,13 @@ PID    COMMAND      %CPU  TIME            STATE
 
 
             <section>
-                <h2>Resources</h2>
+                <h2>Thanks!/ Resources</h2>
+
+                Vicki Boykis | @vboykis <br>
 
                 <div align="center">
 
-                Icons: made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> <br>from <a href=http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> <br>are licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0">CC 3.0 </a><br>
+             
 
 
                 <ul>Links:
@@ -485,6 +517,8 @@ PID    COMMAND      %CPU  TIME            STATE
 
                     </li>
                 </ul>
+
+                   <p>Icons: made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> <br>from <a href=http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> <br>are licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0">CC 3.0 </a><br>
             </div>
 
             
