@@ -204,16 +204,17 @@
 
                     def reduce_function(dict_list):
                     """
-                    Reduces a complete dictionary by summing values
+                    This function reduces a list of dicts by 
                     :param dict_list: List of words 
                     """
                     d = {}
-                    for entry in dict_list:
-                        for k, v in entry.items():
-                            try:
-                                d[k] += v
-                            except KeyError:
-                                d[k] = v
+
+                    for d in dict_list:
+                            for k, v in d.items():
+                                try:
+                                    reduced_dict[k] += v
+                                except KeyError:
+                                    reduced_dict[k] = v
                     return d 
                         </code></pre><br>
                         <img  src="img/github.png"><a href="https://github.com/veekaybee/data-lake-code/blob/master/mapreduce.py">GitHub</a>
@@ -240,13 +241,13 @@
                         <pre>
                         <code class="python" data-trim="">
 
-append_dict = {}
+word_list = []
 files = get_filenames()
 for filename in files: 
     mapr = map_function(filename)
-    append_dict.update(mapr)
+    word_list.append(mapr)
 
-mr = reduce_function(mapr)
+mr = reduce_function(word_list)
 show_items(mr)
 
 vboykis$ time python mapreduce.py 
@@ -337,6 +338,7 @@ PID    COMMAND      %CPU  TIME     #TH       STATE
 
     <section>
                 <h3>Our Multiprocessing Code</h3>
+                <br> 3 GB = 3 minutes
                 <pre>
 
                      <code class="python" data-trim="">
