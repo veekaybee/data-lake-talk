@@ -70,8 +70,8 @@
             </section>
                 <section>
                 <h2>My local environment<br></h2>
-                	<img src="img/environment.png" height="300" width="500">
-                <img src="img/threadscores.png" height="300" width="500">
+                	<img src="img/environment.png">
+                <img src="img/threadscores.png">
 
 
 
@@ -167,11 +167,9 @@
                 </section>
 
             <section>
-                <h3>We should now write some Python</h3>
+                <h3>We should write some Python now</h3>
 
-                <center><code>mapreduce.py</code></center>
-
-
+                <h5><center><code>mapreduce.py</code></center></h5>
                 <ol>
                     <li> <pre><code>get_filenames</code>Read in all text files</pre>
                     <li> <pre><code>get_data</code>Do text processing (strip/split)</pre>
@@ -362,12 +360,10 @@ PID    COMMAND      %CPU  TIME     #TH       STATE
 
 					<h3>Speeding it up with PyPy</h3>
 
-                    <p>"If you want your code to run faster, you should probably just use PyPy.” — Guido"
+                    "If you want your code to run faster, you should probably just use PyPy.” — Guido"
 						
-                    	<p>
-					PyPy is an alternate compiler (over CPython).  Good for:
-					+ longer processes
-					+ mostly Python codebases
+                    
+					Good for longer processes, mostly Python codebases.
 <pre>
                      <code class="python" data-trim="">
                     vboykis$ time pypy mapreduce.py
